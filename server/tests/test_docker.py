@@ -234,7 +234,7 @@ def test_restart_container(docker_action_client):
 
 
 def test_action_container_not_found(monkeypatch):
-    """Returns 500 with detail when container does not exist (matches /services error pattern)."""
+    """Returns 404 with detail when container does not exist (matches REST semantics)."""
     import main
     import docker as docker_sdk
     mock_client = MagicMock()
@@ -244,5 +244,17 @@ def test_action_container_not_found(monkeypatch):
 
     resp = client.post(f"/docker/{'b' * 64}/start")
 
-    assert resp.status_code == 500
+    assert resp.status_code == 404
     assert "detail" in resp.json()
+
+
+def test_action_docker_unavailable(monkeypatch):
+    """Returns 503 when Docker client is not initialized."""
+    import main
+    monkeypatch.setattr(main, "_docker_client", None)
+    client = TestClient(main.app)
+
+    resp = client.post(f"/docker/{'c' * 64}/start")
+
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == "Docker is not available"

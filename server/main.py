@@ -383,27 +383,39 @@ async def get_docker():
 
 @app.post("/docker/{container_id}/start")
 async def docker_start(container_id: str):
+    if _docker_client is None:
+        raise HTTPException(status_code=503, detail="Docker is not available")
     try:
         _docker_client.containers.get(container_id).start()
         return {"ok": True}
+    except docker.errors.NotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/docker/{container_id}/stop")
 async def docker_stop(container_id: str):
+    if _docker_client is None:
+        raise HTTPException(status_code=503, detail="Docker is not available")
     try:
         _docker_client.containers.get(container_id).stop()
         return {"ok": True}
+    except docker.errors.NotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/docker/{container_id}/restart")
 async def docker_restart(container_id: str):
+    if _docker_client is None:
+        raise HTTPException(status_code=503, detail="Docker is not available")
     try:
         _docker_client.containers.get(container_id).restart()
         return {"ok": True}
+    except docker.errors.NotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
