@@ -23,6 +23,7 @@
 		A100000E /* ServicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000010 /* ServicesView.swift */; };
 		A100000F /* ServiceCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000011 /* ServiceCardView.swift */; };
 		A1000010 /* DockerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000012 /* DockerContainer.swift */; };
+		A1000011 /* DockerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000013 /* DockerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		A2000010 /* ServicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesView.swift; sourceTree = "<group>"; };
 		A2000011 /* ServiceCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceCardView.swift; sourceTree = "<group>"; };
 		A2000012 /* DockerContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockerContainer.swift; sourceTree = "<group>"; };
+		A2000013 /* DockerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 				A2000011 /* ServiceCardView.swift */,
 				A2000006 /* ProcessListView.swift */,
 				A2000007 /* SettingsView.swift */,
+				A2000013 /* DockerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 				A100000E /* ServicesView.swift in Sources */,
 				A100000F /* ServiceCardView.swift in Sources */,
 				A1000010 /* DockerContainer.swift in Sources */,
+				A1000011 /* DockerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
