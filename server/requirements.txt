@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+psutil
+docker>=6.0
+pytest
+httpx
