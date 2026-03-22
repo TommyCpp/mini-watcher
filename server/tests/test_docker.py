@@ -80,7 +80,7 @@ def _make_container(status="running", name="/my-app", image_tags=None, mem_limit
     c.name = name
     c.status = status
     mock_image = MagicMock()
-    mock_image.tags = image_tags or ["nginx:latest"]
+    mock_image.tags = image_tags if image_tags is not None else ["nginx:latest"]
     c.image = mock_image
     c.attrs = {"HostConfig": {"Memory": mem_limit}}
     return c
