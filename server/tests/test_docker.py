@@ -1,7 +1,7 @@
 """Tests for Docker monitoring endpoints and helpers."""
 import os
 import sys
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
@@ -29,6 +29,7 @@ def test_calc_cpu_normal():
         },
     }
     result = _calc_cpu(stats)
+    # Docker reports aggregate CPU across all cores, so >100% is valid and expected
     assert result == 200.0
 
 
@@ -215,6 +216,7 @@ def test_start_container(docker_action_client):
     assert resp.status_code == 200
     assert resp.json() == {"ok": True}
     mock_container.start.assert_called_once()
+    mock_docker.containers.get.assert_called_once_with('a' * 64)
 
 
 def test_stop_container(docker_action_client):
@@ -232,7 +234,7 @@ def test_restart_container(docker_action_client):
 
 
 def test_action_container_not_found(monkeypatch):
-    """Returns 500 with detail when container does not exist."""
+    """Returns 500 with detail when container does not exist (matches /services error pattern)."""
     import main
     import docker as docker_sdk
     mock_client = MagicMock()
