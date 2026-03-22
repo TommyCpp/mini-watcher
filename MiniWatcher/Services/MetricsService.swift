@@ -110,8 +110,8 @@ class MetricsService: ObservableObject {
         }
     }
 
-    func controlContainer(id: String, action: DockerAction) async throws {
-        guard let url = URL(string: "\(baseURL)/docker/\(id)/\(action.rawValue)") else {
+    func controlContainer(id: String, action: DockerAction, runtime: String) async throws {
+        guard let url = URL(string: "\(baseURL)/docker/\(id)/\(action.rawValue)?runtime=\(runtime)") else {
             throw URLError(.badURL)
         }
         var request = URLRequest(url: url)

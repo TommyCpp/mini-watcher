@@ -68,10 +68,45 @@ RANGE_SECONDS = {
 PROTECTED_LABELS = {"com.miniwatcher.server"}
 _proc_cpu_cache: dict = {}
 
-# Docker state
+# Docker/Podman state
 _docker_client = None
+_podman_client = None
 _docker_cache: dict = {"available": False, "containers": []}
 _docker_refresh_lock = threading.Lock()
+
+
+def _try_connect(url: str):
+    """Return a connected DockerClient for url, or None."""
+    try:
+        client = docker.DockerClient(base_url=url, timeout=3)
+        client.ping()
+        return client
+    except Exception:
+        return None
+
+
+def _connect_docker():
+    """Connect to Docker daemon. Respects DOCKER_HOST env var."""
+    if os.environ.get("DOCKER_HOST"):
+        return _try_connect(os.environ["DOCKER_HOST"])
+    return _try_connect("unix:///var/run/docker.sock")
+
+
+def _connect_podman():
+    """Connect to Podman daemon. Respects PODMAN_HOST env var."""
+    if os.environ.get("PODMAN_HOST"):
+        return _try_connect(os.environ["PODMAN_HOST"])
+    uid = os.getuid() if hasattr(os, "getuid") else 0
+    for url in [
+        f"unix:///run/user/{uid}/podman/podman.sock",  # rootless Linux
+        os.path.expanduser(
+            "~/.local/share/containers/podman/machine/podman-machine-default/podman.sock"
+        ),  # Podman machine macOS
+    ]:
+        client = _try_connect(url)
+        if client:
+            return client
+    return None
 
 
 def _calc_cpu(stats: dict) -> float:
@@ -92,7 +127,7 @@ def _calc_cpu(stats: dict) -> float:
     return round((cpu_delta / system_delta * num_cpus * 100), 1) if system_delta > 0 else 0.0
 
 
-def _container_info(c) -> dict:
+def _container_info(c, runtime: str) -> dict:
     name = c.name.lstrip("/")
     image = c.image.tags[0] if c.image.tags else c.image.short_id
 
@@ -122,28 +157,34 @@ def _container_info(c) -> dict:
         "memory_mb": memory_mb,
         "memory_limit_mb": memory_limit_mb,
         "memory_percent": memory_percent,
+        "runtime": runtime,
     }
+
+
+def _collect_containers(client, runtime: str) -> list:
+    """Fetch and serialize all containers from one runtime client."""
+    if client is None:
+        return []
+    try:
+        containers = client.containers.list(all=True)
+    except Exception:
+        return []
+    result = []
+    for c in containers:
+        try:
+            result.append(_container_info(c, runtime))
+        except Exception:
+            continue
+    return result
 
 
 def _do_refresh():
     global _docker_cache
-    if _docker_client is None:
-        _docker_cache = {"available": False, "containers": []}
-        return
-    try:
-        containers = _docker_client.containers.list(all=True)
-    except Exception:
-        _docker_cache = {"available": False, "containers": []}
-        return
-
-    result = []
-    for c in containers:
-        try:
-            result.append(_container_info(c))
-        except Exception:
-            continue  # skip this container; others are unaffected
-
-    _docker_cache = {"available": True, "containers": result}
+    docker_containers = _collect_containers(_docker_client, "docker")
+    podman_containers = _collect_containers(_podman_client, "podman")
+    all_containers = docker_containers + podman_containers
+    available = _docker_client is not None or _podman_client is not None
+    _docker_cache = {"available": available, "containers": all_containers}
 
 
 def _refresh_docker():
@@ -199,12 +240,10 @@ async def lifespan(app: FastAPI):
 
     psutil.cpu_percent(percpu=True)  # prime the first reading
 
-    # Initialize Docker client
-    global _docker_client
-    try:
-        _docker_client = docker.from_env()
-    except Exception:
-        _docker_client = None
+    # Initialize Docker and Podman clients independently
+    global _docker_client, _podman_client
+    _docker_client = _connect_docker()
+    _podman_client = _connect_podman()
 
     # Eager first refresh so /docker is populated before serving requests
     await asyncio.to_thread(_refresh_docker)  # non-blocking; called before yield
@@ -296,8 +335,9 @@ async def metrics():
         "usage_percent": mem.percent,
     }
 
-    # Disk
-    disk = psutil.disk_usage("/")
+    # Disk — on macOS, "/" is the read-only system volume; user data is on the Data volume
+    disk_path = "/System/Volumes/Data" if platform.system() == "Darwin" else "/"
+    disk = psutil.disk_usage(disk_path)
     disk_info = {
         "total_gb": round(disk.total / (1024 ** 3), 2),
         "used_gb": round(disk.used / (1024 ** 3), 2),
@@ -381,12 +421,24 @@ async def get_docker():
     return _docker_cache
 
 
+def _runtime_client(runtime: str):
+    """Return the client for the given runtime name, or raise 503."""
+    if runtime == "podman":
+        client = _podman_client
+        label = "Podman"
+    else:
+        client = _docker_client
+        label = "Docker"
+    if client is None:
+        raise HTTPException(status_code=503, detail=f"{label} is not available")
+    return client
+
+
 @app.post("/docker/{container_id}/start")
-async def docker_start(container_id: str):
-    if _docker_client is None:
-        raise HTTPException(status_code=503, detail="Docker is not available")
+async def docker_start(container_id: str, runtime: str = Query("docker")):
+    client = _runtime_client(runtime)
     try:
-        _docker_client.containers.get(container_id).start()
+        client.containers.get(container_id).start()
         return {"ok": True}
     except docker.errors.NotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -395,11 +447,10 @@ async def docker_start(container_id: str):
 
 
 @app.post("/docker/{container_id}/stop")
-async def docker_stop(container_id: str):
-    if _docker_client is None:
-        raise HTTPException(status_code=503, detail="Docker is not available")
+async def docker_stop(container_id: str, runtime: str = Query("docker")):
+    client = _runtime_client(runtime)
     try:
-        _docker_client.containers.get(container_id).stop()
+        client.containers.get(container_id).stop()
         return {"ok": True}
     except docker.errors.NotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -408,11 +459,10 @@ async def docker_stop(container_id: str):
 
 
 @app.post("/docker/{container_id}/restart")
-async def docker_restart(container_id: str):
-    if _docker_client is None:
-        raise HTTPException(status_code=503, detail="Docker is not available")
+async def docker_restart(container_id: str, runtime: str = Query("docker")):
+    client = _runtime_client(runtime)
     try:
-        _docker_client.containers.get(container_id).restart()
+        client.containers.get(container_id).restart()
         return {"ok": True}
     except docker.errors.NotFound as e:
         raise HTTPException(status_code=404, detail=str(e))

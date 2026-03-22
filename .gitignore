@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Xcode
+xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+*.xcscmblueprint
+
+# Swift Package Manager
+.swiftpm/
+
+# Python
+server/venv/
+server/__pycache__/
+server/*.pyc
+server/history.db

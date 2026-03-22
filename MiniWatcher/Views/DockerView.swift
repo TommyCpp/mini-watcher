@@ -14,23 +14,23 @@ struct DockerView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 case false:
                     ContentUnavailableView(
-                        "Docker Unavailable",
+                        "No Runtime Available",
                         systemImage: "shippingbox",
-                        description: Text("Docker is not available on this host.")
+                        description: Text("Neither Docker nor Podman is available on this host.")
                     )
                 case true:
                     if metricsService.dockerContainers.isEmpty {
                         ContentUnavailableView(
                             "No Containers",
                             systemImage: "shippingbox",
-                            description: Text("No Docker containers found.")
+                            description: Text("No containers found on Docker or Podman.")
                         )
                     } else {
                         containerList
                     }
                 }
             }
-            .navigationTitle("Docker")
+            .navigationTitle("Containers")
             .navigationBarTitleDisplayMode(.inline)
         }
         .alert("Action Failed", isPresented: $showError) {
@@ -56,7 +56,7 @@ struct DockerView: View {
 
     private func performAction(container: DockerContainer, action: DockerAction) async {
         do {
-            try await metricsService.controlContainer(id: container.id, action: action)
+            try await metricsService.controlContainer(id: container.id, action: action, runtime: container.runtime)
         } catch {
             actionError = error.localizedDescription
             showError = true
@@ -73,19 +73,21 @@ private struct ContainerRowView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            // Name + image + status badge
-            HStack {
+            // Name + image + runtime badge + status badge
+            HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(container.name)
                         .font(.subheadline.weight(.semibold))
-                        .lineLimit(1)
                     Text(container.image)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
                 Spacer()
-                StatusBadge(status: container.status)
+                VStack(alignment: .trailing, spacing: 4) {
+                    StatusBadge(status: container.status)
+                    RuntimeBadge(runtime: container.runtime)
+                }
             }
 
             // CPU
@@ -155,6 +157,21 @@ private struct ContainerRowView: View {
         .padding(12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(.white.opacity(0.15), lineWidth: 1))
+    }
+}
+
+// MARK: - Runtime Badge
+
+private struct RuntimeBadge: View {
+    let runtime: String
+
+    var body: some View {
+        Text(runtime.capitalized)
+            .font(.caption2.weight(.medium))
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(.blue.opacity(0.15), in: Capsule())
+            .foregroundStyle(.blue)
     }
 }
 
