@@ -199,6 +199,17 @@ async def lifespan(app: FastAPI):
 
     psutil.cpu_percent(percpu=True)  # prime the first reading
 
+    # Initialize Docker client
+    global _docker_client
+    try:
+        _docker_client = docker.from_env()
+    except Exception:
+        _docker_client = None
+
+    # Eager first refresh so /docker is populated before serving requests
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(None, _refresh_docker)
+
     global _prev_net_io, _prev_net_ts
     _prev_net_io = psutil.net_io_counters()
     _prev_net_ts = time.time()
@@ -214,6 +225,10 @@ async def lifespan(app: FastAPI):
                 if _cpu_percent_per_core
                 else 0.0
             )
+
+            # Refresh Docker stats on every sampler tick
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, _refresh_docker)
 
             # Every 5 iterations (~10s), record a history sample
             iteration += 1
