@@ -1,0 +1,330 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1000001 /* MiniWatcherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001 /* MiniWatcherApp.swift */; };
+		A1000002 /* SystemMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002 /* SystemMetrics.swift */; };
+		A1000003 /* MetricsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000003 /* MetricsService.swift */; };
+		A1000004 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000004 /* DashboardView.swift */; };
+		A1000005 /* GaugeRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000005 /* GaugeRingView.swift */; };
+		A1000006 /* ProcessListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000006 /* ProcessListView.swift */; };
+		A1000007 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000007 /* SettingsView.swift */; };
+		A1000008 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A200000A /* Assets.xcassets */; };
+		A1000009 /* HistoryDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000B /* HistoryDataPoint.swift */; };
+		A100000A /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000C /* HistoryView.swift */; };
+		A100000B /* MetricChartPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000D /* MetricChartPanel.swift */; };
+		A100000C /* NetworkChartPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000E /* NetworkChartPanel.swift */; };
+		A100000D /* ServiceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000F /* ServiceInfo.swift */; };
+		A100000E /* ServicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000010 /* ServicesView.swift */; };
+		A100000F /* ServiceCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000011 /* ServiceCardView.swift */; };
+		A1000010 /* DockerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000012 /* DockerContainer.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A2000001 /* MiniWatcherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniWatcherApp.swift; sourceTree = "<group>"; };
+		A2000002 /* SystemMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMetrics.swift; sourceTree = "<group>"; };
+		A2000003 /* MetricsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsService.swift; sourceTree = "<group>"; };
+		A2000004 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		A2000005 /* GaugeRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugeRingView.swift; sourceTree = "<group>"; };
+		A2000006 /* ProcessListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessListView.swift; sourceTree = "<group>"; };
+		A2000007 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A2000008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2000009 /* MiniWatcher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniWatcher.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A200000A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A200000B /* HistoryDataPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDataPoint.swift; sourceTree = "<group>"; };
+		A200000C /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		A200000D /* MetricChartPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricChartPanel.swift; sourceTree = "<group>"; };
+		A200000E /* NetworkChartPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkChartPanel.swift; sourceTree = "<group>"; };
+		A200000F /* ServiceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceInfo.swift; sourceTree = "<group>"; };
+		A2000010 /* ServicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesView.swift; sourceTree = "<group>"; };
+		A2000011 /* ServiceCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceCardView.swift; sourceTree = "<group>"; };
+		A2000012 /* DockerContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockerContainer.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A3000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A3000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000008 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXGroup section */
+		A4000001 = {
+			isa = PBXGroup;
+			children = (
+				A4000002 /* MiniWatcher */,
+				A4000006 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A4000002 /* MiniWatcher */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001 /* MiniWatcherApp.swift */,
+				A4000003 /* Models */,
+				A4000004 /* Services */,
+				A4000005 /* Views */,
+				A200000A /* Assets.xcassets */,
+				A2000008 /* Info.plist */,
+			);
+			path = MiniWatcher;
+			sourceTree = "<group>";
+		};
+		A4000003 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A2000002 /* SystemMetrics.swift */,
+				A200000B /* HistoryDataPoint.swift */,
+				A200000F /* ServiceInfo.swift */,
+				A2000012 /* DockerContainer.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A4000004 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A2000003 /* MetricsService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A4000005 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A2000004 /* DashboardView.swift */,
+				A2000005 /* GaugeRingView.swift */,
+				A200000C /* HistoryView.swift */,
+				A200000D /* MetricChartPanel.swift */,
+				A200000E /* NetworkChartPanel.swift */,
+				A2000010 /* ServicesView.swift */,
+				A2000011 /* ServiceCardView.swift */,
+				A2000006 /* ProcessListView.swift */,
+				A2000007 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A4000006 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A2000009 /* MiniWatcher.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A5000001 /* MiniWatcher */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7000003 /* Build configuration list for PBXNativeTarget "MiniWatcher" */;
+			buildPhases = (
+				A6000001 /* Sources */,
+				A3000001 /* Frameworks */,
+				A3000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MiniWatcher;
+			productName = MiniWatcher;
+			productReference = A2000009 /* MiniWatcher.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A8000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = A7000001 /* Build configuration list for PBXProject "MiniWatcher" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A4000001;
+			productRefGroup = A4000006 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A5000001 /* MiniWatcher */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A6000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000001 /* MiniWatcherApp.swift in Sources */,
+				A1000002 /* SystemMetrics.swift in Sources */,
+				A1000003 /* MetricsService.swift in Sources */,
+				A1000004 /* DashboardView.swift in Sources */,
+				A1000005 /* GaugeRingView.swift in Sources */,
+				A1000006 /* ProcessListView.swift in Sources */,
+				A1000007 /* SettingsView.swift in Sources */,
+				A1000009 /* HistoryDataPoint.swift in Sources */,
+				A100000A /* HistoryView.swift in Sources */,
+				A100000B /* MetricChartPanel.swift in Sources */,
+				A100000C /* NetworkChartPanel.swift in Sources */,
+				A100000D /* ServiceInfo.swift in Sources */,
+				A100000E /* ServicesView.swift in Sources */,
+				A100000F /* ServiceCardView.swift in Sources */,
+				A1000010 /* DockerContainer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A9000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A9000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A9000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8HU2W469PT;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MiniWatcher/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.miniwatcher.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8HU2W469PT;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MiniWatcher/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.miniwatcher.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A7000001 /* Build configuration list for PBXProject "MiniWatcher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9000001 /* Debug */,
+				A9000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7000003 /* Build configuration list for PBXNativeTarget "MiniWatcher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9000003 /* Debug */,
+				A9000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A8000001 /* Project object */;
+}
