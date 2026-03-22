@@ -376,6 +376,38 @@ async def history(time_range: str = Query(default="1h", alias="range")):
     ]
 
 
+@app.get("/docker")
+async def get_docker():
+    return _docker_cache
+
+
+@app.post("/docker/{container_id}/start")
+async def docker_start(container_id: str):
+    try:
+        _docker_client.containers.get(container_id).start()
+        return {"ok": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/docker/{container_id}/stop")
+async def docker_stop(container_id: str):
+    try:
+        _docker_client.containers.get(container_id).stop()
+        return {"ok": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/docker/{container_id}/restart")
+async def docker_restart(container_id: str):
+    try:
+        _docker_client.containers.get(container_id).restart()
+        return {"ok": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/services")
 async def get_services():
     launchctl = _get_launchctl_list()
