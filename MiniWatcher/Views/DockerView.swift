@@ -28,8 +28,6 @@ struct DockerView: View {
                     } else {
                         containerList
                     }
-                default:
-                    EmptyView()
                 }
             }
             .navigationTitle("Docker")
@@ -122,7 +120,7 @@ private struct ContainerRowView: View {
                             .frame(height: 6)
                         RoundedRectangle(cornerRadius: 3)
                             .fill(container.memoryPercent > 85 ? Color.red : Color.blue)
-                            .frame(width: geo.size.width * CGFloat(container.memoryPercent / 100),
+                            .frame(width: geo.size.width * CGFloat(min(container.memoryPercent, 100.0) / 100),
                                    height: 6)
                     }
                 }
@@ -135,22 +133,22 @@ private struct ContainerRowView: View {
                              systemImage: "play.fill",
                              disabled: isActioning || container.status == "running" || container.status == "paused") {
                     isActioning = true
+                    defer { isActioning = false }
                     await onAction(.start)
-                    isActioning = false
                 }
                 ActionButton(label: "Stop",
                              systemImage: "stop.fill",
                              disabled: isActioning || container.status != "running") {
                     isActioning = true
+                    defer { isActioning = false }
                     await onAction(.stop)
-                    isActioning = false
                 }
                 ActionButton(label: "Restart",
                              systemImage: "arrow.clockwise",
                              disabled: isActioning || container.status != "running") {
                     isActioning = true
+                    defer { isActioning = false }
                     await onAction(.restart)
-                    isActioning = false
                 }
             }
         }
