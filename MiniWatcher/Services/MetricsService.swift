@@ -8,6 +8,8 @@ class MetricsService: ObservableObject {
     @Published var errorMessage: String?
     @Published var dockerContainers: [DockerContainer] = []
     @Published var dockerAvailable: Bool? = nil
+    @Published var tmuxSessions: [TmuxSession] = []
+    @Published var tmuxAvailable: Bool? = nil
 
     @AppStorage("serverHost") var serverHost = "192.168.1.100"
     @AppStorage("serverPort") var serverPort = "8085"
@@ -28,7 +30,8 @@ class MetricsService: ObservableObject {
             while !Task.isCancelled {
                 async let metricsResult: Void = fetchMetrics()
                 async let dockerResult: Void = fetchDocker()
-                _ = await (metricsResult, dockerResult)
+                async let tmuxResult: Void = fetchTmux()
+                _ = await (metricsResult, dockerResult, tmuxResult)
                 try? await Task.sleep(for: .seconds(3))
             }
         }
@@ -74,6 +77,38 @@ class MetricsService: ObservableObject {
             if dockerAvailable == nil { dockerAvailable = false }
             // subsequent errors: keep previous state silently
         }
+    }
+
+    func fetchTmux() async {
+        guard let url = URL(string: "\(baseURL)/tmux") else { return }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoded = try JSONDecoder().decode(TmuxResponse.self, from: data)
+            tmuxSessions = decoded.sessions
+            tmuxAvailable = decoded.available
+        } catch is CancellationError {
+            // ignore
+        } catch {
+            if tmuxAvailable == nil { tmuxAvailable = false }
+        }
+    }
+
+    func killTmuxSession(_ name: String) async throws {
+        let encoded = name.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? name
+        guard let url = URL(string: "\(baseURL)/tmux/\(encoded)/kill") else {
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+            struct ErrorBody: Decodable { let detail: String }
+            let message = (try? JSONDecoder().decode(ErrorBody.self, from: data))?.detail
+                ?? "Failed to kill session"
+            throw NSError(domain: "TmuxError", code: 0,
+                          userInfo: [NSLocalizedDescriptionKey: message])
+        }
+        await fetchTmux()
     }
 
     func fetchHistory(range: HistoryRange) async throws -> [HistoryDataPoint] {
