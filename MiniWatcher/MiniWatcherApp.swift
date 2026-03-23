@@ -27,6 +27,11 @@ struct MiniWatcherApp: App {
                         Label("Docker", systemImage: "shippingbox")
                     }
 
+                TmuxView()
+                    .tabItem {
+                        Label("Tmux", systemImage: "terminal")
+                    }
+
                 SettingsView()
                     .tabItem {
                         Label("Settings", systemImage: "gear")
