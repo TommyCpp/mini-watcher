@@ -164,3 +164,4 @@ def test_invalid_session_chars_set():
     assert "/" in _INVALID_SESSION_CHARS
     assert "\x00" in _INVALID_SESSION_CHARS
     assert "\n" in _INVALID_SESSION_CHARS
+    assert "\r" in _INVALID_SESSION_CHARS

@@ -66,7 +66,7 @@ RANGE_SECONDS = {
 }
 
 PROTECTED_LABELS = {"com.miniwatcher.server"}
-_INVALID_SESSION_CHARS = frozenset("/\x00\n")
+_INVALID_SESSION_CHARS = frozenset("/\x00\n\r")
 _proc_cpu_cache: dict = {}
 
 # Docker/Podman state
