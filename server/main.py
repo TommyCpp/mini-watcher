@@ -356,6 +356,22 @@ async def get_tmux():
     return _get_tmux_sessions()
 
 
+@app.post("/tmux/{session}/kill")
+async def kill_tmux_session(session: str):
+    if any(c in _INVALID_SESSION_CHARS for c in session):
+        raise HTTPException(status_code=400, detail="Invalid session name")
+    result = subprocess.run(
+        ["tmux", "kill-session", "-t", session],
+        capture_output=True, text=True,
+    )
+    if result.returncode != 0:
+        raise HTTPException(
+            status_code=500,
+            detail=result.stderr.strip() or "Failed to kill session",
+        )
+    return {"success": True}
+
+
 @app.get("/metrics")
 async def metrics():
     # CPU
