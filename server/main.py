@@ -66,6 +66,7 @@ RANGE_SECONDS = {
 }
 
 PROTECTED_LABELS = {"com.miniwatcher.server"}
+_INVALID_SESSION_CHARS = frozenset("/\x00\n")
 _proc_cpu_cache: dict = {}
 
 # Docker/Podman state
@@ -214,6 +215,43 @@ def _get_launchctl_list() -> dict:
     return services
 
 
+def _get_tmux_sessions() -> dict:
+    """Return tmux session list. Handles not-installed, no-server, and zero-sessions cases."""
+    try:
+        result = subprocess.run(
+            ["tmux", "ls", "-F",
+             "#{session_name}\t#{session_windows}\t#{session_created}\t#{session_attached}"],
+            capture_output=True, text=True,
+        )
+    except FileNotFoundError:
+        return {"available": False, "sessions": []}
+
+    if result.returncode != 0:
+        # tmux installed but no server/sessions running
+        return {"available": True, "sessions": []}
+
+    if not result.stdout.strip():
+        return {"available": True, "sessions": []}
+
+    sessions = []
+    for line in result.stdout.strip().split("\n"):
+        parts = line.split("\t")
+        if len(parts) != 4:
+            continue
+        name, windows_str, created_str, attached_str = parts
+        try:
+            sessions.append({
+                "name": name,
+                "windows": int(windows_str),
+                "created": int(created_str),
+                "attached": attached_str == "1",
+            })
+        except ValueError:
+            continue
+
+    return {"available": True, "sessions": sessions}
+
+
 def _read_user_plists() -> list:
     dirs = [
         os.path.expanduser("~/Library/LaunchAgents"),
@@ -311,6 +349,11 @@ def _print_network_info():
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/tmux")
+async def get_tmux():
+    return _get_tmux_sessions()
 
 
 @app.get("/metrics")
