@@ -143,7 +143,7 @@ private struct AttachedBadge: View {
 
 private extension Date {
     var relativeString: String {
-        let seconds = Int(Date.now.timeIntervalSince(self))
+        let seconds = max(0, Int(Date.now.timeIntervalSince(self)))
         switch seconds {
         case ..<60:      return "\(seconds)s ago"
         case ..<3600:    return "\(seconds / 60)m ago"
