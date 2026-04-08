@@ -30,6 +30,7 @@
 		A1000015 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000017 /* HomeView.swift */; };
 		A1000016 /* TabCustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000018 /* TabCustomizationView.swift */; };
 		A1000017 /* RoomSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000019 /* RoomSensor.swift */; };
+		A1000018 /* OutdoorBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200001A /* OutdoorBannerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		A2000017 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		A2000018 /* TabCustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCustomizationView.swift; sourceTree = "<group>"; };
 		A2000019 /* RoomSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSensor.swift; sourceTree = "<group>"; };
+		A200001A /* OutdoorBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutdoorBannerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				A2000015 /* TmuxView.swift */,
 				A2000017 /* HomeView.swift */,
 				A2000018 /* TabCustomizationView.swift */,
+				A200001A /* OutdoorBannerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				A1000015 /* HomeView.swift in Sources */,
 				A1000016 /* TabCustomizationView.swift in Sources */,
 				A1000017 /* RoomSensor.swift in Sources */,
+				A1000018 /* OutdoorBannerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
