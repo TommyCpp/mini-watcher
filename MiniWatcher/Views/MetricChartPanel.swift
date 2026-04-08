@@ -77,7 +77,7 @@ struct MetricChartPanel: View {
             }
         }
         .padding(14)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(.white.opacity(0.15), lineWidth: 1))
+        .background(in: RoundedRectangle(cornerRadius: 16))
+        .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 16))
     }
 }

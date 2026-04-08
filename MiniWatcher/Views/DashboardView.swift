@@ -94,7 +94,7 @@ struct DashboardView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.white.opacity(0.15), lineWidth: 1))
+        .background(in: RoundedRectangle(cornerRadius: 10))
+        .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 10))
     }
 }

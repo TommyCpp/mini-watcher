@@ -2,10 +2,15 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var service: MetricsService
+    @EnvironmentObject var haService: HomeAssistantService
+    @EnvironmentObject var tabSettings: TabSettings
     @State private var host: String = ""
     @State private var port: String = ""
     @State private var testResult: TestResult?
     @State private var isTesting = false
+    @State private var haHost: String = ""
+    @State private var haPort: String = ""
+    @State private var haToken: String = ""
     @FocusState private var focusedField: Field?
 
     enum TestResult {
@@ -13,7 +18,7 @@ struct SettingsView: View {
     }
 
     enum Field {
-        case host, port
+        case host, port, haHost, haPort, haToken
     }
 
     var body: some View {
@@ -74,6 +79,51 @@ struct SettingsView: View {
                     }
                     LabeledContent("URL", value: service.baseURL)
                 }
+
+                Section("Home Assistant") {
+                    TextField("Host", text: $haHost)
+                        .textContentType(.URL)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .focused($focusedField, equals: .haHost)
+
+                    TextField("Port", text: $haPort)
+                        .keyboardType(.numberPad)
+                        .focused($focusedField, equals: .haPort)
+
+                    SecureField("Access Token", text: $haToken)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .focused($focusedField, equals: .haToken)
+                }
+
+                Section {
+                    Button("Save & Connect HA") {
+                        focusedField = nil
+                        haService.haHost = haHost.trimmingCharacters(in: .whitespacesAndNewlines)
+                        haService.haPort = haPort.trimmingCharacters(in: .whitespacesAndNewlines)
+                        haService.haToken = haToken.trimmingCharacters(in: .whitespacesAndNewlines)
+                        haService.startPolling()
+                    }
+                    .fontWeight(.medium)
+                }
+
+                Section("Tab Bar") {
+                    NavigationLink("Customize Tabs") {
+                        TabCustomizationView()
+                    }
+                }
+
+                Section("Home Assistant Status") {
+                    LabeledContent("Connected", value: haService.isConnected ? "Yes" : "No")
+                    if let error = haService.errorMessage {
+                        LabeledContent("Error", value: error)
+                    }
+                    LabeledContent("Sensors", value: "\(haService.rooms.count)")
+                    ForEach(haService.rooms) { room in
+                        LabeledContent(room.displayName, value: room.temperature.map { String(format: "%.1f%@", $0, room.temperatureUnit) } ?? "unavailable")
+                    }
+                }
             }
             .scrollDismissesKeyboard(.immediately)
             .toolbar {
@@ -87,6 +137,9 @@ struct SettingsView: View {
             .onAppear {
                 host = service.serverHost
                 port = service.serverPort
+                haHost = haService.haHost
+                haPort = haService.haPort
+                haToken = haService.haToken
             }
         }
     }

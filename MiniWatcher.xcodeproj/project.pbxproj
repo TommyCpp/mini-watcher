@@ -62,7 +62,7 @@
 		A2000018 /* TabCustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCustomizationView.swift; sourceTree = "<group>"; };
 		A2000019 /* RoomSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSensor.swift; sourceTree = "<group>"; };
 		A200001A /* OutdoorBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutdoorBannerView.swift; sourceTree = "<group>"; };
-		A200001B /* RoomTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTileView.swift; sourceTree = \"<group>\"; };
+		A200001B /* RoomTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTileView.swift; sourceTree = "<group>"; };
 		A200001C /* RoomDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

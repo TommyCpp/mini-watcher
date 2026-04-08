@@ -319,7 +319,12 @@ async def lifespan(app: FastAPI):
                 _prev_net_io = net_io
                 _prev_net_ts = now
 
-                mem_percent = psutil.virtual_memory().percent
+                _mem = psutil.virtual_memory()
+                if platform.system() == "Darwin":
+                    _hard = getattr(_mem, "active", 0) + getattr(_mem, "wired", 0)
+                    mem_percent = round(_hard / _mem.total * 100, 1)
+                else:
+                    mem_percent = _mem.percent
                 insert_sample(now, _cpu_percent_overall, mem_percent, max(0, recv_ps), max(0, sent_ps))
 
     task = asyncio.create_task(_sampler())
@@ -385,13 +390,20 @@ async def metrics():
         "load_avg_15m": round(load15, 2),
     }
 
-    # Memory
+    # Memory — on macOS use active+wired (hard usage, excluding compressor/cache)
     mem = psutil.virtual_memory()
+    if platform.system() == "Darwin":
+        hard_used = getattr(mem, "active", 0) + getattr(mem, "wired", 0)
+        used_gb = round(hard_used / (1024 ** 3), 2)
+        usage_percent = round(hard_used / mem.total * 100, 1)
+    else:
+        used_gb = round(mem.used / (1024 ** 3), 2)
+        usage_percent = mem.percent
     memory = {
         "total_gb": round(mem.total / (1024 ** 3), 2),
-        "used_gb": round(mem.used / (1024 ** 3), 2),
+        "used_gb": used_gb,
         "available_gb": round(mem.available / (1024 ** 3), 2),
-        "usage_percent": mem.percent,
+        "usage_percent": usage_percent,
     }
 
     # Disk — on macOS, "/" is the read-only system volume; user data is on the Data volume
