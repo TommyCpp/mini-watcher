@@ -102,6 +102,19 @@ class HomeAssistantService: ObservableObject {
             }
             let states = try JSONDecoder().decode([HAState].self, from: data)
             parseStates(states)
+
+            let entityIds = rooms.compactMap(\.temperatureEntityId)
+            let areas = await fetchAreas(for: entityIds)
+            if !areas.isEmpty {
+                rooms = rooms.map { room in
+                    var updated = room
+                    if let eid = room.temperatureEntityId, let area = areas[eid] {
+                        updated.area = area
+                    }
+                    return updated
+                }
+            }
+
             isConnected = true
             errorMessage = nil
         } catch is CancellationError {
@@ -109,6 +122,49 @@ class HomeAssistantService: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
             isConnected = false
+        }
+    }
+
+    private struct AreaEntry: Decodable {
+        let entity_id: String
+        let area: String
+    }
+
+    private func fetchAreas(for entityIds: [String]) async -> [String: String] {
+        guard !haToken.isEmpty, !entityIds.isEmpty else { return [:] }
+        guard let url = URL(string: "\(baseURL)/api/template") else { return [:] }
+
+        // Builds a JSON array of {entity_id, area} for every temperature sensor.
+        // We return a list (not a dict) because HA's Jinja2 doesn't reliably
+        // support **-unpacking into dict() — list + namespace is the safe pattern.
+        let template = """
+        {% set ns = namespace(items=[]) %}\
+        {% for s in states.sensor if s.attributes.device_class == 'temperature' %}\
+        {% set ns.items = ns.items + [{'entity_id': s.entity_id, 'area': (area_name(s.entity_id) or '')}] %}\
+        {% endfor %}\
+        {{ ns.items | tojson }}
+        """
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(haToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: String] = ["template": template]
+        guard let encoded = try? JSONSerialization.data(withJSONObject: body) else { return [:] }
+        request.httpBody = encoded
+
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 200 else { return [:] }
+            let entries = try JSONDecoder().decode([AreaEntry].self, from: data)
+            var result: [String: String] = [:]
+            for entry in entries where !entry.area.isEmpty {
+                result[entry.entity_id] = entry.area
+            }
+            return result
+        } catch {
+            return [:]
         }
     }
 
