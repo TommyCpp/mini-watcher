@@ -4,6 +4,7 @@ import SwiftUI
 struct RoomSensor: Identifiable {
     let id: String // device name, e.g. "meter_plus_345d"
     var friendlyName: String // e.g. "Meter Plus 345D"
+    var area: String? = nil
     var temperature: Double?
     var humidity: Double?
     var battery: Double?
@@ -13,7 +14,10 @@ struct RoomSensor: Identifiable {
     var temperatureHistory: [HAHistoryPoint] = []
 
     var displayName: String {
-        friendlyName
+        if let area = area, !area.isEmpty {
+            return area
+        }
+        return friendlyName
             .replacingOccurrences(of: " Temperature", with: "")
             .replacingOccurrences(of: " Humidity", with: "")
             .replacingOccurrences(of: " Battery", with: "")
